@@ -6,7 +6,7 @@ import resampling as res
 @cython.boundscheck(False) # turn off bounds-checking for entire function
 @cython.embedsignature(True)
 
-cdef class smc:
+class smc:
     r"""Class to do sequential Monte Carlo approximation on models of interest.
     """
     
@@ -25,6 +25,7 @@ cdef class smc:
         cdef double logZ = 0.
         
         for t in range(T):
+            #print t
             # Propagate
             X[t,:,:] = self.model.simM(t,X[t-1,ancestors[t-1,:],:])
             
