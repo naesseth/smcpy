@@ -65,7 +65,7 @@ class smc:
             logW = self.model.evalLogG(t, X, Xp[ancestors,:]) - logV
             maxLogW = np.max(logW)
             w = np.exp(logW - maxLogW)
-            logZ[t] = logZ[t-1] + maxLogW + np.log(np.sum(w)) - np.log(N)
+            #logZ[t] = logZ[t-1] + maxLogW + np.log(np.sum(w)) - np.log(N)
             w /= np.sum(w)
             
             #
