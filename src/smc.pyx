@@ -62,7 +62,7 @@ class smc:
             X = self.model.simM(t,Xp[ancestors,:])
             
             # Update weights and logZ
-            logW = self.model.evalLogG(t, X, Xp[ancestors,:]) - logV
+            logW = self.model.evalLogG(t, X, Xp[ancestors,:], logV)
             maxLogW = np.max(logW)
             w = np.exp(logW - maxLogW)
             #logZ[t] = logZ[t-1] + maxLogW + np.log(np.sum(w)) - np.log(N)

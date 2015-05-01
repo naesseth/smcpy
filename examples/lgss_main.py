@@ -10,8 +10,8 @@ from lgss_model_fullyadapted import *
 # Generate data
 T = 100
 a = 0.9
-varV = 10.0
-varE = 1.0
+varV = 1.0
+varE = 0.01
 
 x = np.zeros(T)
 y = np.zeros(T)

@@ -7,7 +7,6 @@ class lgss_fa():
     r""" Example of the bootstrap formalism for sequential inference in a 
     simple linear Gaussian Model.
     """
-    
     def __init__(self, a, varV, varE, y):
         self.dim = 1
         self.a = a
@@ -16,7 +15,7 @@ class lgss_fa():
         self.y = y
         self.sigma2 = (self.varV * self.varE) / (self.varV + self.varE)
         
-    def evalLogG(self, t, xCur, xPrev):
+    def evalLogG(self, t, xCur, xPrev, logV):
         return np.zeros(xCur.shape[0])
 #        return -0.5*(xCur[:,0] - self.y[t])**2/self.varE
         
