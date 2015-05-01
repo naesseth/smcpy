@@ -20,3 +20,6 @@ class lgss():
         
     def simM(self, t, xPrev):
         return self.a*xPrev + np.sqrt(self.varV)*np.random.normal(size=xPrev.shape)
+        
+    def evalAuxLogV(self, t, xPrev):
+        return np.zeros(xPrev.shape[0])
