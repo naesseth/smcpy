@@ -31,6 +31,7 @@ def resampling(np.ndarray[np.float64_t, ndim=1] w, scheme='multinomial'):
     if scheme == 'multinomial':
         bins = np.cumsum(w)
         ind = np.arange(N)[np.digitize(np.random.random_sample(N), bins)]
+        # Sort uniforms!
         # Slower
         #U = np.random.rand(N)
         #for i  in range(N):

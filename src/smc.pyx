@@ -16,6 +16,22 @@ class smc:
             
     @cython.boundscheck(False)
     def runForward(self, int T, int N=100, resScheme ='multinomial'):
+        r"""Runs a sequential Monte Carlo method on a model/formalism.
+        
+        Parameters
+        ----------
+        T : int
+            Maximum iteration number, e.g. max time index in a state space model.
+        N : int
+            Number of particles.
+        resScheme : string
+            Resampling scheme: multinomial, residual, stratified, systematic
+            
+        Returns
+        -------
+        Nothing, however E[X], E[X^2] and logZ estimates are available as
+        EX EX2 logZ
+        """
         # Setup sequential Monte Carlo method
         cdef np.ndarray[np.float64_t, ndim=2] X = np.zeros((N, self.model.dim), dtype=np.float64)
         cdef np.ndarray[np.float64_t, ndim=2] Xp = np.zeros((N, self.model.dim), dtype=np.float64)

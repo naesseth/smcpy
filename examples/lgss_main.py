@@ -40,7 +40,7 @@ mB = lgss.lgss(a, varV, varE, y)
 bsPF = smc.smc(mB)
 
 Np = 5000
-bsPF.runForward(T,N=Np, resScheme='stratified')
+bsPF.runForward(T,N=Np, resScheme='systematic')
 
 # Mean
 figure()

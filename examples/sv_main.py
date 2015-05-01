@@ -23,7 +23,11 @@ mB = sv.sv(a, b, varV, y)
 bsPF = smc.smc(mB)
 
 Np = 50000
-bsPF.runForward(T,N=Np, resScheme='stratified')
+bsPF.runForward(T,N=Np, resScheme='systematic')
+
+# Observations
+figure()
+plot(y)
 
 # Mean
 figure()
@@ -33,3 +37,4 @@ plot(bsPF.EX)
 # Cov
 figure()
 plot(bsPF.EX2 - bsPF.EX**2)
+
