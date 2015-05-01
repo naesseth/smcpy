@@ -1,11 +1,13 @@
-import imp
+#!/usr/bin/python
+import sys
+sys.path.append("../src")
 import numpy as np
 import matplotlib
 import smc
-lgss = imp.load_source('lgss', '../examples/lgss_bootstrap.py')
+import lgss_model_bootstrap as lgss
 
 # Generate data
-T = 1000
+T = 100
 a = 0.9
 varV = 1.0
 varE = 1.0

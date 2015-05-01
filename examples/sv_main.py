@@ -1,8 +1,10 @@
-import imp
+#!/usr/bin/python
+import sys
+sys.path.append("../src")
 import numpy as np
 import matplotlib
 import smc
-sv = imp.load_source('sv', '../examples/sv_bootstrap.py')
+import sv_bootstrap as sv
 
 # Generate data
 T = 100
