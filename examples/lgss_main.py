@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import time
 sys.path.append("../src")
 import numpy as np
 import matplotlib
@@ -8,7 +9,7 @@ from lgss_model_bootstrap import *
 from lgss_model_fullyadapted import *
 
 # Generate data
-T = 100
+T = 1000
 a = 0.9
 varV = 1.0
 varE = 0.01
@@ -37,15 +38,20 @@ for t in range(T):
     xfilt[t] = xpred[t] + K*(y[t]-xpred[t])
     Pfilt[t] = Ppred[t] - K*Ppred[t]
 
-Np = 500000
+Np = 100000
 mBS = lgss_bs(a, varV, varE, y)
 mFA = lgss_fa(a, varV, varE, y)
 bsPF = smc.smc(mBS,T,Np)
 faPF = smc.smc(mFA,T,Np)
 
-
+tStart = time.clock()
 bsPF.runForward(resScheme='systematic')
+tEnd = time.clock()
+print 'Time elapsed BSPF: ',tEnd-tStart
+tStart = time.clock()
 faPF.runForward(resScheme='systematic')
+tEnd = time.clock()
+print 'Time elapsed FAPF: ',tEnd-tStart
 
 # Mean
 figure()

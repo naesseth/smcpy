@@ -12,6 +12,17 @@ class smc:
     
     @cython.boundscheck(False)
     def __init__(self, model, int T, int N=100):
+        r"""
+        
+        Parameters
+        ----------
+        model : 
+            The model/formalism to run SMC on.
+        T : int
+            Maximum iteration number, e.g. max time index in a state space model.
+        N : int
+            Number of particles.
+        """
         self.model = model
         cdef np.ndarray[np.float64_t, ndim=3] X = np.zeros((N, T, self.model.dim), dtype=np.float64)
         cdef np.ndarray[np.float64_t, ndim=1] logZ = np.zeros(T, dtype=np.float64)
@@ -27,26 +38,20 @@ class smc:
         
     @cython.boundscheck(False)
     def runForward(self, resScheme ='multinomial'):
-        r"""Runs a sequential Monte Carlo method on a model/formalism.
+        r"""Runs a forward sequential Monte Carlo method on a model/formalism.
         
         Parameters
         ----------
-        T : int
-            Maximum iteration number, e.g. max time index in a state space model.
-        N : int
-            Number of particles.
         resScheme : string
             Resampling scheme: multinomial, residual, stratified, systematic
             
         Returns
         -------
-        Nothing, however E[X], E[X^2] and logZ estimates are available as
-        EX EX2 logZ
-        """
-        cdef int N = self.N
+        Nothing, however X, E[X], E[X^2] and logZ estimates are available as
+        X EX EX2 logZ
+        """        
         # Setup sequential Monte Carlo method
-#        cdef np.ndarray[np.float64_t, ndim=2] X = np.zeros((N, self.model.dim), dtype=np.float64)
-#        cdef np.ndarray[np.float64_t, ndim=2] Xp = np.zeros((N, self.model.dim), dtype=np.float64)
+        cdef int N = self.N
         cdef np.ndarray[np.float64_t, ndim=1] logW = np.zeros(N, dtype=np.float64)
         cdef np.ndarray[np.float64_t, ndim=1] logV = np.zeros(N, dtype=np.float64)
         cdef np.ndarray[np.int_t, ndim=1] ancestors = np.zeros(N, dtype=np.int_)
@@ -77,17 +82,12 @@ class smc:
             #logZ[t] = logZ[t-1] + maxLogW + np.log(np.sum(w)) - np.log(N)
             w /= np.sum(w)
             
-            #
-            #print (w*X).shape
+            # Save estimates
             self.EX[t,:] = np.sum(self.X[:,t,:].T*w,axis=1) 
             self.EX2[t,:] = np.sum((self.X[:,t,:]**2).T*w,axis=1)
             
            
-            #Xp = X
-            
-#        self.EX = EX
-#        self.EX2 = EX2
-#        self.logZ = logZ
+
         
 #    @cython.boundscheck(False)    
 #    def simBackward(self):
