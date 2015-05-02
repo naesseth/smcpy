@@ -4,7 +4,7 @@ cimport numpy as np
 cimport cython
 @cython.boundscheck(False) # turn off bounds-checking for entire function
 @cython.embedsignature(True) 
-def resampling(np.ndarray[np.float64_t, ndim=1] w, scheme='multinomial'):
+def resampling(np.ndarray[np.float64_t, ndim=1] w, scheme='systematic'):
     r"""Resample a particle system of size N to keep most promising weights.
         
     Parameters
