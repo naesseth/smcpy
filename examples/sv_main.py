@@ -4,7 +4,7 @@ sys.path.append("../src")
 import numpy as np
 import matplotlib
 import smc
-import sv_bootstrap as sv
+import sv_model_bootstrap as sv
 
 # Generate data
 T = 100
@@ -18,12 +18,11 @@ y = np.zeros(T)
 for t in range(T):
     x[t] = a*x[t-1] + np.sqrt(varV)*np.random.normal()
     y[t] = b*np.exp(x[t]/2)*np.random.normal()
-    
-mB = sv.sv(a, b, varV, y)
-bsPF = smc.smc(mB)
-
+   
 Np = 50000
-bsPF.runForward(T,N=Np, resScheme='systematic')
+mB = sv.sv(a, b, varV, y)
+bsPF = smc.smc(mB,T,Np)
+bsPF.runForward(resScheme='systematic')
 
 # Observations
 figure()

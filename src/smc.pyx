@@ -11,11 +11,22 @@ class smc:
     """
     
     @cython.boundscheck(False)
-    def __init__(self, model):
+    def __init__(self, model, int T, int N=100):
         self.model = model
-            
+        cdef np.ndarray[np.float64_t, ndim=3] X = np.zeros((N, T, self.model.dim), dtype=np.float64)
+        cdef np.ndarray[np.float64_t, ndim=1] logZ = np.zeros(T, dtype=np.float64)
+        cdef np.ndarray[np.float64_t, ndim=2] EX = np.zeros((T,self.model.dim), dtype=np.float64)
+        cdef np.ndarray[np.float64_t, ndim=2] EX2 = np.zeros((T,self.model.dim), dtype=np.float64)
+        
+        self.X = X
+        self.logZ = logZ
+        self.EX = EX
+        self.EX2 = EX2
+        self.T = T
+        self.N = N
+        
     @cython.boundscheck(False)
-    def runForward(self, int T, int N=100, resScheme ='multinomial'):
+    def runForward(self, resScheme ='multinomial'):
         r"""Runs a sequential Monte Carlo method on a model/formalism.
         
         Parameters
@@ -32,9 +43,10 @@ class smc:
         Nothing, however E[X], E[X^2] and logZ estimates are available as
         EX EX2 logZ
         """
+        cdef int N = self.N
         # Setup sequential Monte Carlo method
-        cdef np.ndarray[np.float64_t, ndim=2] X = np.zeros((N, self.model.dim), dtype=np.float64)
-        cdef np.ndarray[np.float64_t, ndim=2] Xp = np.zeros((N, self.model.dim), dtype=np.float64)
+#        cdef np.ndarray[np.float64_t, ndim=2] X = np.zeros((N, self.model.dim), dtype=np.float64)
+#        cdef np.ndarray[np.float64_t, ndim=2] Xp = np.zeros((N, self.model.dim), dtype=np.float64)
         cdef np.ndarray[np.float64_t, ndim=1] logW = np.zeros(N, dtype=np.float64)
         cdef np.ndarray[np.float64_t, ndim=1] logV = np.zeros(N, dtype=np.float64)
         cdef np.ndarray[np.int_t, ndim=1] ancestors = np.zeros(N, dtype=np.int_)
@@ -44,13 +56,10 @@ class smc:
         cdef double maxLogV = 0.
         
         # Stuff to store        
-        cdef np.ndarray[np.float64_t, ndim=1] logZ = np.zeros(T, dtype=np.float64)
-        cdef np.ndarray[np.float64_t, ndim=2] EX = np.zeros((T,self.model.dim), dtype=np.float64)
-        cdef np.ndarray[np.float64_t, ndim=2] EX2 = np.zeros((T,self.model.dim), dtype=np.float64)
         
-        for t in range(T):
+        for t in range(self.T):
             # Update auxiliary resampling weights
-            logV = self.model.evalAuxLogV(t, Xp)
+            logV = self.model.evalAuxLogV(t, self.X[:,t-1,:])
             maxLogV = np.max(logV)
             resW = np.exp(logV-maxLogV + logW-maxLogW)
             resW /= np.sum(resW)
@@ -59,10 +68,10 @@ class smc:
             ancestors = res.resampling(resW, resScheme)
             
             # Propagate
-            X = self.model.simM(t,Xp[ancestors,:])
+            self.X[:,t,:] = self.model.simM(t,self.X[ancestors,t-1,:])
             
             # Update weights and logZ
-            logW = self.model.evalLogG(t, X, Xp[ancestors,:], logV)
+            logW = self.model.evalLogG(t, self.X[:,t,:], self.X[ancestors,t-1,:], logV)
             maxLogW = np.max(logW)
             w = np.exp(logW - maxLogW)
             #logZ[t] = logZ[t-1] + maxLogW + np.log(np.sum(w)) - np.log(N)
@@ -70,15 +79,15 @@ class smc:
             
             #
             #print (w*X).shape
-            EX[t,:] = np.sum(X.T*w,axis=1) 
-            EX2[t,:] = np.sum((X**2).T*w,axis=1)
+            self.EX[t,:] = np.sum(self.X[:,t,:].T*w,axis=1) 
+            self.EX2[t,:] = np.sum((self.X[:,t,:]**2).T*w,axis=1)
             
            
-            Xp = X
+            #Xp = X
             
-        self.EX = EX
-        self.EX2 = EX2
-        self.logZ = logZ
+#        self.EX = EX
+#        self.EX2 = EX2
+#        self.logZ = logZ
         
 #    @cython.boundscheck(False)    
 #    def simBackward(self):

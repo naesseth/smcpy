@@ -15,7 +15,7 @@ class sv():
         self.varV = varV
         self.y = y
         
-    def evalLogG(self, t, xCur, xPrev):
+    def evalLogG(self, t, xCur, xPrev, logV):
         return -0.5* self.y[t]**2/(self.b**2 * np.exp(xCur[:,0]))
         
     def simM(self, t, xPrev):

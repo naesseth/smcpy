@@ -37,14 +37,15 @@ for t in range(T):
     xfilt[t] = xpred[t] + K*(y[t]-xpred[t])
     Pfilt[t] = Ppred[t] - K*Ppred[t]
 
+Np = 500000
 mBS = lgss_bs(a, varV, varE, y)
 mFA = lgss_fa(a, varV, varE, y)
-bsPF = smc.smc(mBS)
-faPF = smc.smc(mFA)
+bsPF = smc.smc(mBS,T,Np)
+faPF = smc.smc(mFA,T,Np)
 
-Np = 100
-bsPF.runForward(T,N=Np, resScheme='systematic')
-faPF.runForward(T,N=Np, resScheme='systematic')
+
+bsPF.runForward(resScheme='systematic')
+faPF.runForward(resScheme='systematic')
 
 # Mean
 figure()
