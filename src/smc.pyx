@@ -37,6 +37,7 @@ class smc:
         self.N = N
         
     @cython.boundscheck(False)
+    @cython.profile(True)
     def runForward(self, resScheme ='multinomial'):
         r"""Runs a forward sequential Monte Carlo method on a model/formalism.
         

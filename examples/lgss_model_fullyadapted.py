@@ -21,7 +21,7 @@ class lgss_fa():
         
     def simM(self, t, xPrev):
         m = (self.a*xPrev/self.varV + self.y[t]/self.varE) * self.sigma2
-        return m + np.sqrt(self.sigma2)*np.random.normal(size=xPrev.shape)
+        return m + np.sqrt(self.sigma2)*np.random.standard_normal(size=xPrev.shape)
         
     def evalAuxLogV(self, t, xPrev):
         return -0.5*(self.a*xPrev[:,0] - self.y[t])**2/(self.varE+self.varV)
