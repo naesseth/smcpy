@@ -2,6 +2,6 @@ from distutils.core import setup
 from Cython.Build import cythonize
 
 setup(
-    ext_modules = cythonize("./src/*.pyx")
+    ext_modules = cythonize(["./src/*.pyx","./examples/sv_model_nsmc.pyx"])
 )
 

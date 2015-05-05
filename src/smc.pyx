@@ -37,7 +37,7 @@ class smc:
         self.N = N
         
     @cython.boundscheck(False)
-    @cython.profile(True)
+    @cython.profile(False)
     def runForward(self, resScheme ='multinomial'):
         r"""Runs a forward sequential Monte Carlo method on a model/formalism.
         
@@ -74,7 +74,7 @@ class smc:
             ancestors = res.resampling(resW, resScheme)
             
             # Propagate
-            self.X[:,t,:] = self.model.simM(t,self.X[ancestors,t-1,:])
+            self.X[:,t,:] = self.model.simM(t,self.X[ancestors,t-1,:],ancestors)
             
             # Update weights and logZ
             logW = self.model.evalLogG(t, self.X[:,t,:], self.X[ancestors,t-1,:], logV)

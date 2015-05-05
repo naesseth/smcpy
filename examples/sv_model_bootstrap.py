@@ -3,7 +3,7 @@
 # y_t = b exp(x_t/2) e_t, e_t ~ N(0,1)
 import numpy as np
 
-class sv():
+class sv_bs():
     r""" Example of the bootstrap formalism for sequential inference in a 
     stochastic volatility model.
     """
@@ -18,7 +18,7 @@ class sv():
     def evalLogG(self, t, xCur, xPrev, logV):
         return -0.5* self.y[t]**2/(self.b**2 * np.exp(xCur[:,0]))
         
-    def simM(self, t, xPrev):
+    def simM(self, t, xPrev, ancestors):
         return self.a*xPrev + np.sqrt(self.varV)*np.random.normal(size=xPrev.shape)
         
     def evalAuxLogV(self, t, xPrev):
