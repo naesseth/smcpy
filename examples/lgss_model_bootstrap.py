@@ -17,7 +17,7 @@ class lgss_bs():
     def evalLogG(self, t, xCur, xPrev, logV):
         return -0.5*(xCur[:,0] - self.y[t])**2/self.varE
         
-    def simM(self, t, xPrev):
+    def simM(self, t, xPrev, ancestors):
         return self.a*xPrev + np.sqrt(self.varV)*np.random.standard_normal(size=xPrev.shape)
         
     def evalAuxLogV(self, t, xPrev):

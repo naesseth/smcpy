@@ -19,7 +19,7 @@ class lgss_fa():
         return np.zeros(xCur.shape[0])
 #        return -0.5*(xCur[:,0] - self.y[t])**2/self.varE
         
-    def simM(self, t, xPrev):
+    def simM(self, t, xPrev, ancestors):
         m = (self.a*xPrev/self.varV + self.y[t]/self.varE) * self.sigma2
         return m + np.sqrt(self.sigma2)*np.random.standard_normal(size=xPrev.shape)
         
