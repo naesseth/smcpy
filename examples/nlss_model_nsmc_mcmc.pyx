@@ -32,7 +32,7 @@ class nlss_nsmc_mcmc():
         return -0.5*(0.5*xCond + 25.*xCond/(1+xCond**2) + 8.*np.cos(1.2*float(t)) - X)**2/self.varV
         
     def mhrw(self, np.ndarray[np.float64_t, ndim=2] X, double xCond, double beta, int t):
-        cdef double cov = np.cov(X[:,0])
+        cdef double cov = 1.
         cdef np.ndarray[np.float64_t, ndim=2] Xprop = X
         cdef np.ndarray[np.float64_t, ndim=2] Xout = X
         

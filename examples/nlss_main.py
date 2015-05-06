@@ -12,7 +12,7 @@ from nlss_model_nsmc_mcmc import *
 T = 100
 varx0 = 5. 
 varV = 10.
-varE = 1.0
+varE = 0.1
 
 x = np.zeros(T)
 y = np.zeros(T)
@@ -32,13 +32,13 @@ M = 10
 mNSMC = nlss_nsmc(varx0, varV, varE, y, M)
 nPF = smc.smc(mNSMC,T,Np)
 
-kappa = 0.5
+kappa = 0.1
 K = 10
 mNSMCmcmc = nlss_nsmc_mcmc(varx0, varV, varE, y, M, K, kappa)
 nmcmcPF = smc.smc(mNSMCmcmc,T,Np)
 
 
-I = 10
+I = 25
 bsMean = np.zeros((I,T))
 bsVar = np.zeros((I,T))
 bsESS = np.zeros(T)
